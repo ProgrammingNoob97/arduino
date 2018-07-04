@@ -1,10 +1,14 @@
 #include <Keypad.h>
 #include <RCSwitch.h>
+#include <EEPROM.h>
 
 bool is_change= false;
 bool is_check = false;
 //Initialize buzzer pin
-const int buzzer = 12;
+const int buzzer = 11;
+
+//Initialize close button
+const int close_button = 12;
 
 //Initialize transmitting pins
 const int transmitt = 13;
@@ -12,12 +16,6 @@ const int transmitt = 13;
 //Initialize RBG LED pins
 const int led_red   = 9;
 const int led_green = 10;
-
-//Initialize read index;
-int read_index;
-//Initialize password buffers
-char *password = (char*)malloc(sizeof(char) * 255);
-char *password_buffer = (char*)malloc(sizeof(char) * 255);
 
 //Initialize keypad
 const byte rows = 4;
@@ -27,8 +25,8 @@ char keys[rows][cols] = {
     {'1', '2', '3'},
     {'4', '5', '6'},
     {'7', '8', '9'},
-    {'*'. '0', '#'}
-}
+    {'*', '0', '#'}
+};
 
 byte rowPins[rows] = {5, 4, 3, 2};
 byte colPins[cols] = {8, 7, 6};
@@ -55,115 +53,39 @@ void close_garage(void)
     delay(200);
 }
 
-void key_beeping(void)
+void beep(void)
 {
-    tone()
+    digitalWrite(buzzer, HIGH);
+    delay(20);
+    digitalWrite(buzzer, LOW);
 }
 
-void valid_beeping(void)
+void invalid_beep(void)
 {
-    tone()
-}
-
-void invalid_beeping(void)
-{
-    tone()
-}
-void reset_password(void)
-{
-    memset(password, '\0', 255);
-    strcpy(password, "17061997");
-}
-
-void set_password(void)
-{
-    memset(password, '\0', 255);
-    strcpy(password, password_buffer);
-    memset(password_buffer, '\0', 255); 
-}
-
-void input_password(char key)
-{
-    password_buffer[read_index++] = key;
-}
-
-bool authenticate(void)
-{
-    if(strcmp(password, password_buffer) == 0)
-    {
-        memset(password, '\0', 255);
-        return true;
-    }
-    memset(password, '\0', 255);
-    return false;
+    digitalWrite(buzzer, HIGH);
+    delay(1200);
+    digitalWrite(buzzer, LOW);
 }
 
 void setup()
 {
     pinMode(buzzer, OUTPUT);
     pinMode(led_red, OUTPUT);
+    pinMode(led_green, OUTPUT);
+    pinMode(close_button, INPUT);
     rc.enableTransmit(transmitt);
     rc.setProtocol(1);
     rc.setPulseLength(248);
     rc.setRepeatTransmit(3);    
-    reset_password();
+    Serial.begin(9600);
 }
 
 void loop()
 {
-    char key = keypad.getKey();  
+    char key = keypad.getKey();
     if(key != NO_KEY)
     {
-        if(!is_change && !is_check)
-        {
-            if(key == '#')
-            {
-                read_index = 0;
-                is_check = true;
-            }
-            else if(key == '*')
-            {
-                read_index = 0;
-                is_change = true;
-            }
-            else if(key == '0')
-            {
-                reset_password();
-            }
-        }
-        else
-        {
-            if(key == '#')
-            {
-                if(is_check == true)
-                {
-                    if(authenticate())
-                    {
-                        open_garage();
-                        valid_beeping();
-                        digitalWrite(led_red, LOW);
-                        digitalWrite(led_green, HIGH);
-                    }
-                    else
-                    {
-                        invalid_beeping();
-                        digitalWrite(led_green, LOW);
-                        digitalWrite(led_red, HIGH);
-                    }
-                    is_check = false;
-                }
-                else if(is_change == true)
-                {
-                    set_password();
-                    valid_beeping();
-                    is_change = false;
-                }
-            }
-            else if(key != '*')
-            {
-                input_password(key);
-                key_beeping();
-            }
-        }
+        Serial.println(key);
+        beep();
     }
 }

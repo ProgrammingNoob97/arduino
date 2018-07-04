@@ -15,6 +15,28 @@
             "compilerPath": "/usr/bin/gcc",
             "cStandard": "c11",
             "cppStandard": "c++17"
+        },
+        {
+            "name": "Win32",
+            "includePath": [
+                "D:\\Personal\\Documents\\Arduino\\libraries\\DHT_sensor_library",
+                "C:\\Program Files (x86)\\Arduino\\hardware\\arduino\\avr\\cores\\arduino",
+                "D:\\Personal\\Documents\\Arduino\\libraries\\Adafruit_ESP8266",
+                "D:\\Personal\\Documents\\Arduino\\libraries\\DS3231",
+                "D:\\Personal\\Documents\\Arduino\\libraries\\Sodaq_DS3231\\src",
+                "C:\\Program Files (x86)\\Arduino\\libraries\\LiquidCrystal\\src"
+            ],
+            "browse": {
+                "limitSymbolsToIncludedHeaders": false,
+                "path": [
+                    "D:\\Personal\\Documents\\Arduino\\libraries\\DHT_sensor_library",
+                    "C:\\Program Files (x86)\\Arduino\\hardware\\arduino\\avr\\cores\\arduino",
+                    "D:\\Personal\\Documents\\Arduino\\libraries\\Adafruit_ESP8266",
+                    "D:\\Personal\\Documents\\Arduino\\libraries\\DS3231",
+                    "D:\\Personal\\Documents\\Arduino\\libraries\\Sodaq_DS3231\\src",
+                    "C:\\Program Files (x86)\\Arduino\\libraries\\LiquidCrystal\\src"
+                ]
+            }
         }
     ],
     "version": 4
